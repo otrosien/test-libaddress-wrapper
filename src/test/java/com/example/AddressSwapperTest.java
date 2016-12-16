@@ -11,7 +11,7 @@ import com.google.i18n.addressinput.common.FormOptions;
 import com.google.i18n.addressinput.common.FormatInterpreter;
 import com.neovisionaries.i18n.CountryCode;
 
-public class AddressWrapperTest {
+public class AddressSwapperTest {
 
     @Test
     public void testSwappedRecipient() {
@@ -25,10 +25,10 @@ public class AddressWrapperTest {
                 .setAdminArea("AZ")
                 .setAddressLines(Arrays.asList("795 E DRAGRAM"))
                 .build();
-        AddressData wrappedAddress = AddressWrapper.wrap(addressData);
+        AddressData swappedAddress = FormatInterpreterWrapper.swap(addressData);
 
-        assertThat(wrappedAddress.getOrganization()).isEqualTo("Max Mustermann");
-        assertThat(wrappedAddress.getRecipient()).isEqualTo("Big Data AG");
+        assertThat(swappedAddress.getOrganization()).isEqualTo("Max Mustermann");
+        assertThat(swappedAddress.getRecipient()).isEqualTo("Big Data AG");
     }
 
     @Test
@@ -38,11 +38,10 @@ public class AddressWrapperTest {
                 .setLanguageCode("en")
                 .setRecipient("Max Mustermann")
                 .setPostalCode("12345")
-                .setAddressLines(Arrays.asList(AddressWrapper.streetAndHouseNr(CountryCode.DE, "Hauptstr.", "101a")))
+                .setAddressLines(Arrays.asList(new StreetAndHouseNo(CountryCode.DE).merge("Hauptstr.", "101a")))
                 .build();
-        AddressData wrappedAddress = AddressWrapper.wrap(addressData);
 
-        assertThat(wrappedAddress.getAddressLines()).containsExactly("Hauptstr. 101a");
+        assertThat(addressData.getAddressLines()).containsExactly("Hauptstr. 101a");
     }
 
     @Test
@@ -70,7 +69,7 @@ public class AddressWrapperTest {
         FormatInterpreter interpreter = new FormatInterpreter(new FormOptions().createSnapshot());
         // recipient equals sender in this case.
         assertThat(new FormatInterpreterWrapper(interpreter).getEnvelopeAddress(senderData, recipientData)).containsExactly(
-                "Max Mustermann", "Big Data AG", "Wolkengasse 2", "20355 Hamburg", "Germany"
+                "Big Data AG", "Max Mustermann", "Wolkengasse 2", "20355 Hamburg", "Germany"
                 );
     }
 }

@@ -13,7 +13,17 @@ public class FormatInterpreterWrapper {
 
     final FormatInterpreter interpreter;
 
+    static AddressData swap(AddressData data) {
+        return AddressData.builder(data)
+                // swap organization and recipient
+                .setRecipient(data.getOrganization())
+                .setOrganization(data.getRecipient())
+                .build();
+    }
+
     public List<String> getEnvelopeAddress(AddressData senderAddress, AddressData recipientAddress) {
+        senderAddress = swap(senderAddress);
+        recipientAddress = swap(recipientAddress);
         List<String> fields = interpreter.getEnvelopeAddress(recipientAddress);
         if (recipientAddress.getPostalCountry() != null
                 && !recipientAddress.getPostalCountry().equals(senderAddress.getPostalCountry())) {
