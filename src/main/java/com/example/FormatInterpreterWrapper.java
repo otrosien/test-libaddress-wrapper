@@ -2,6 +2,7 @@ package com.example;
 
 import java.util.List;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.i18n.addressinput.common.AddressData;
 import com.google.i18n.addressinput.common.FormatInterpreter;
 import com.neovisionaries.i18n.CountryCode;
@@ -13,6 +14,7 @@ public class FormatInterpreterWrapper {
 
     final FormatInterpreter interpreter;
 
+    @VisibleForTesting
     static AddressData swap(AddressData data) {
         return AddressData.builder(data)
                 // swap organization and recipient
