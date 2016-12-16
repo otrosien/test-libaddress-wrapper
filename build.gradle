@@ -1,0 +1,28 @@
+buildscript {
+    rootProject.ext.useMavenLocal = rootProject.hasProperty('useMavenLocal')
+
+    repositories {
+        jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
+        if (useMavenLocal) {
+            mavenLocal()
+        }
+        maven { url "http://artifactory.epages.works:8081/artifactory/ng-release-local" }
+    }
+    dependencies {
+        classpath "com.epages.ng:ng-gradle-plugins:0.8.${useMavenLocal ? '0-SNAPSHOT' : '201612081237'}"
+    }
+}
+
+apply plugin:'ng-repository'
+apply plugin:'ng-java'
+apply plugin:'ng-boot'
+apply plugin:'ng-artifactory'
+apply plugin:'ng-sonar'
+
+dependencies {
+    compile 'com.epages.libaddressinput:common:0.2'
+    compile 'com.neovisionaries:nv-i18n:1.21'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.assertj:assertj-core:3.6.1'
+}
